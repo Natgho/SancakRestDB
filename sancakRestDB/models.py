@@ -16,6 +16,9 @@ class Deviraldigim(models.Model):
         db_table = 'DevirAldigim'
         verbose_name_plural = 'DevirAldigim'
 
+    def __str__(self):
+        return "Miktar: " + str(self.deviraldim)
+
 
 class Disiplin(models.Model):
     disiplin_id = models.AutoField(db_column='Disiplin_id', primary_key=True)  # Field name made lowercase.
@@ -30,7 +33,10 @@ class Disiplin(models.Model):
     class Meta:
         managed = False
         db_table = 'Disiplin'
-        verbose_name_plural = 'Disiplin'
+        verbose_name_plural = 'Disiplin Cezalari'
+
+    def __str__(self):
+        return self.adisoyadi + " " + str(self.tarih)
 
 
 class Etkinliksurus(models.Model):
@@ -44,7 +50,10 @@ class Etkinliksurus(models.Model):
     class Meta:
         managed = False
         db_table = 'EtkinlikSurus'
-        verbose_name_plural = 'EtkinlikSurus'
+        verbose_name_plural = 'Surus Etkinlikleri'
+
+    def __str__(self):
+        return self.etkinlikadi + " " + str(self.etkinliktarihi)
 
 
 class Giris(models.Model):
@@ -69,7 +78,10 @@ class Girislog(models.Model):
     class Meta:
         managed = False
         db_table = 'GirisLog'
-        verbose_name_plural = 'GirisLog'
+        verbose_name_plural = 'Giris Kayitlari'
+
+    def __str__(self):
+        return "Kisi:" + self.ehliyetno + " Tarih:" + str(self.tarih)
 
 
 class Harcamalar(models.Model):
@@ -85,6 +97,9 @@ class Harcamalar(models.Model):
         db_table = 'Harcamalar'
         verbose_name_plural = 'Harcamalar'
 
+    def __str__(self):
+        return "Nedeni: " + self.nedenharcandi + " Tutar:" + self.harcanantutar
+
 
 class Kasaborc(models.Model):
     kasaborc_id = models.AutoField(db_column='KasaBorc_id', primary_key=True)  # Field name made lowercase.
@@ -98,7 +113,10 @@ class Kasaborc(models.Model):
     class Meta:
         managed = False
         db_table = 'KasaBorc'
-        verbose_name_plural = 'KasaBorc'
+        verbose_name_plural = 'Karizma Takibi'
+
+    def __str__(self):
+        return self.adisoyadi + " Tutar:" + str(self.alinantutar) + " TL"
 
 
 class Kmtakip(models.Model):
@@ -114,7 +132,10 @@ class Kmtakip(models.Model):
     class Meta:
         managed = False
         db_table = 'KmTakip'
-        verbose_name_plural = 'KmTakip'
+        verbose_name_plural = 'Kilometre Takibi'
+
+    def __str__(self):
+        return self.adisoyadi
 
 
 class Kunye(models.Model):
@@ -127,7 +148,8 @@ class Kunye(models.Model):
     kgiristarihi = models.DateField(db_column='KGirisTarihi')  # Field name made lowercase.
     meslegi = models.CharField(db_column='Meslegi', max_length=50)  # Field name made lowercase.
     yemintarihi = models.DateField(db_column='YeminTarihi')  # Field name made lowercase.
-    ehliyetno = models.CharField(db_column='EhliyetNo', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    ehliyetno = models.CharField(db_column='EhliyetNo', max_length=10, blank=True,
+                                 null=True)  # Field name made lowercase.
     kangrubu = models.CharField(db_column='KanGrubu', max_length=5)  # Field name made lowercase.
     motormarka = models.CharField(db_column='MotorMarka', max_length=25)  # Field name made lowercase.
     motorcc = models.CharField(db_column='MotorCC', max_length=5)  # Field name made lowercase.
@@ -141,6 +163,9 @@ class Kunye(models.Model):
         db_table = 'Kunye'
         verbose_name_plural = 'Kunye'
 
+    def __str__(self):
+        return self.adisoyadi + " (" + self.nick + ")"
+
 
 class Meclis(models.Model):
     meclis_id = models.AutoField(db_column='Meclis_id', primary_key=True)  # Field name made lowercase.
@@ -152,7 +177,10 @@ class Meclis(models.Model):
     class Meta:
         managed = False
         db_table = 'Meclis'
-        verbose_name_plural = 'Meclis'
+        verbose_name_plural = 'Meclis Kararlari'
+
+    def __str__(self):
+        return self.konu + " " + str(self.tarih)
 
 
 class Pachyelek(models.Model):
@@ -173,7 +201,10 @@ class Pachyelek(models.Model):
     class Meta:
         managed = False
         db_table = 'PachYelek'
-        verbose_name_plural = 'PachYelek'
+        verbose_name_plural = 'Pach ve Yelek Takibi'
+
+    def __str__(self):
+        return self.adisoyadi
 
 
 class Sayman(models.Model):
@@ -189,7 +220,10 @@ class Sayman(models.Model):
     class Meta:
         managed = False
         db_table = 'Sayman'
-        verbose_name_plural = 'Sayman'
+        verbose_name_plural = 'Odemeler(Sayman)'
+
+    def __str__(self):
+        return self.adisoyadi + " Gerekce:" + str(self.odemesekli)
 
 
 class Stok(models.Model):
@@ -213,7 +247,7 @@ class Stok(models.Model):
         verbose_name_plural = 'Stok'
 
     def __str__(self):
-        return str(self.stoktarihi)
+        return "Son Guncellenme Tarihi: " + str(self.stoktarihi)
 
 
 class Surushatirlat(models.Model):
@@ -227,7 +261,10 @@ class Surushatirlat(models.Model):
     class Meta:
         managed = False
         db_table = 'SurusHatirlat'
-        verbose_name_plural = 'SurusHatirlat'
+        verbose_name_plural = 'Planlanan Surusler'
+
+    def __str__(self):
+        return self.surusadi + " " + str(self.tarih)
 
 
 class AuthGroup(models.Model):
@@ -347,4 +384,7 @@ class Images(models.Model):
     class Meta:
         managed = False
         db_table = 'images'
-        verbose_name_plural = 'images'
+        verbose_name_plural = 'Ehliyet Fotograflari'
+
+    def __str__(self):
+        return "Ehliyet No:" + str(self.ehliyetno)
