@@ -14,7 +14,7 @@ class Deviraldigim(models.Model):
     class Meta:
         managed = False
         db_table = 'DevirAldigim'
-        verbose_name_plural = 'DevirAldigim'
+        verbose_name_plural = 'Devranilan'
 
     def __str__(self):
         return "Miktar: " + str(self.deviraldim)
