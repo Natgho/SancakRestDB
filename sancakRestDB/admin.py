@@ -1,13 +1,92 @@
 from django.contrib import admin
 from django.apps import apps
-from django.contrib.admin.sites import AlreadyRegistered
+from .models import Deviraldigim, Disiplin, Kunye, Giris, Etkinliksurus, Harcamalar, Kasaborc, Kmtakip, \
+    Meclis, Pachyelek, Sayman, Stok, Surushatirlat, Girislog
 
-app_models = apps.get_app_config('sancakRestDB').get_models()
-for model in app_models:
-    try:
-        if not model._meta.db_table.startswith(("auth", "django", "DevirAldigim")):
-            admin.site.register(model)
-    except AlreadyRegistered:
-        pass
-# Register your models here.
-# TODO add all models here.
+
+@admin.register(Deviraldigim)
+class DeviraldigimAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Disiplin)
+class DisiplinAdmin(admin.ModelAdmin):
+    list_display = ("adisoyadi", "tarih", "uyariraporu")
+
+    def get_queryset(self, request):
+        qs = super(DisiplinAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(ehliyetno=int(request.user.username))
+
+
+@admin.register(Etkinliksurus)
+class EtkinlikAdmin(admin.ModelAdmin):
+    list_display = ("etkinliktarihi", "etkinlikadi", "aciklama", "etkinlikyapildimi")
+
+
+@admin.register(Giris)
+class GirisAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Girislog)
+class GirisKayitlariAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Harcamalar)
+class HarcamalarAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Kasaborc)
+class KasaborcAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Kmtakip)
+class KmtakipAdmin(admin.ModelAdmin):
+    list_display = ("adisoyadi", "km", "rotaturu")
+
+    def get_queryset(self, request):
+        qs = super(KmtakipAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(ehliyetno=request.user.username)
+
+
+@admin.register(Kunye)
+class KunyeAdmin(admin.ModelAdmin):
+    list_display = ("nick", "adisoyadi", "plaka")
+
+    def get_queryset(self, request):
+        qs = super(KunyeAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(ehliyetno=request.user.username)
+
+
+@admin.register(Meclis)
+class MeclisAdmin(admin.ModelAdmin):
+    list_display = ("tarih", "konu", "alinankarar", "aciklama")
+
+
+@admin.register(Pachyelek)
+class PachyelekAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Sayman)
+class SaymanAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Stok)
+class StokAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Surushatirlat)
+class StokAdmin(admin.ModelAdmin):
+    list_display = ("tarih", "surusadi", "rota", "ortkm")

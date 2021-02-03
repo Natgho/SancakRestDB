@@ -66,7 +66,7 @@ class Giris(models.Model):
     class Meta:
         managed = False
         db_table = 'Giris'
-        verbose_name_plural = 'Giris'
+        verbose_name_plural = 'Giris Bilgileri'
 
 
 class Girislog(models.Model):
@@ -275,6 +275,19 @@ class AuthGroup(models.Model):
         db_table = 'auth_group'
 
 
+class Images(models.Model):
+    ehliyetno = models.IntegerField(db_column='EhliyetNo')  # Field name made lowercase.
+    image = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'images'
+        verbose_name_plural = 'Ehliyet Fotograflari'
+
+    def __str__(self):
+        return "Ehliyet No:" + str(self.ehliyetno)
+
+
 class AuthGroupPermissions(models.Model):
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
     permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
@@ -375,16 +388,3 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
-
-
-class Images(models.Model):
-    ehliyetno = models.IntegerField(db_column='EhliyetNo')  # Field name made lowercase.
-    image = models.TextField()
-
-    class Meta:
-        managed = False
-        db_table = 'images'
-        verbose_name_plural = 'Ehliyet Fotograflari'
-
-    def __str__(self):
-        return "Ehliyet No:" + str(self.ehliyetno)
