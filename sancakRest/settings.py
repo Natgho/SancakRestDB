@@ -236,8 +236,9 @@ WSGI_APPLICATION = 'sancakRest.wsgi.application'
 #     }
 # }
 db = f'mysql://{os.environ["DB_USER"]}:{os.environ["DB_PASSWORD"]}@{os.environ["DB_HOST"]}:{os.environ["DB_PORT"]}/{os.environ["DB_NAME"]}'
+
 DATABASES = {'default': dj_database_url.config(
-    default=db,
+    default=os.environ.get("DATABASE_URL", db),
 )}
 
 # Password validation
