@@ -51,7 +51,7 @@ JAZZMIN_SETTINGS = {
     "site_title": "Sancak Chopper Club Admin",
 
     # Title on the brand, and login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Sancak Yonetim Paneli",
+    "site_header": "Sancak Chopper MK",
 
     # # square logo to use for your site, must be present in static files, used for favicon and brand on top left
     # "site_logo": "books/img/logo.png",
@@ -76,7 +76,7 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
 
         # Url that gets reversed (Permissions can be added)
-        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
 
         # external url that opens in a new window (Permissions can be added)
         {"name": "Facebook", "url": "https://www.facebook.com/bursachopper/", "new_window": True},
@@ -169,6 +169,23 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
     # Add a language dropdown into the admin
     "language_chooser": True,
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "slate",
+    "dark_mode_theme": "slate",
+    "accent": "accent-lime",
+    "brand_colour": "navbar-danger",
+    "navbar_small_text": True,
+    "navbar": "navbar-dark",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "sidebar_nav_flat_style": True,
 }
 
 MIDDLEWARE = [
