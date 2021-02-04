@@ -121,13 +121,13 @@ class Kasaborc(models.Model):
 
 class Kmtakip(models.Model):
     km_id = models.AutoField(db_column='Km_id', primary_key=True)  # Field name made lowercase.
-    adisoyadi = models.CharField(db_column='AdiSoyadi', max_length=25)  # Field name made lowercase.
+    adisoyadi = models.CharField(db_column='AdiSoyadi', max_length=40)  # Field name made lowercase.
     ehliyetno = models.CharField(db_column='EhliyetNo', max_length=10)  # Field name made lowercase.
     tarih = models.DateField(db_column='Tarih')  # Field name made lowercase.
     rotaturu = models.CharField(db_column='RotaTuru', max_length=20)  # Field name made lowercase.
     km = models.DecimalField(db_column='KM', max_digits=5, decimal_places=1)  # Field name made lowercase.
-    rota = models.CharField(db_column='Rota', max_length=250)  # Field name made lowercase.
-    aciklama = models.CharField(db_column='Aciklama', max_length=250)  # Field name made lowercase.
+    rota = models.CharField(db_column='Rota', max_length=250, null=True, blank=True)  # Field name made lowercase.
+    aciklama = models.CharField(db_column='Aciklama', max_length=250, null=True, blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -156,7 +156,7 @@ class Kunye(models.Model):
     plaka = models.CharField(db_column='Plaka', max_length=10)  # Field name made lowercase.
     telno = models.CharField(db_column='TelNo', max_length=15)  # Field name made lowercase.
     yakintelno = models.CharField(db_column='YakinTelNo', max_length=15)  # Field name made lowercase.
-    yelekdontarihi = models.CharField(db_column='YelekDonTarihi', max_length=11)  # Field name made lowercase.
+    yelekdontarihi = models.CharField(db_column='YelekDonTarihi', max_length=11, null=True, blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -164,7 +164,7 @@ class Kunye(models.Model):
         verbose_name_plural = 'Kunye'
 
     def __str__(self):
-        return self.adisoyadi + " (" + self.nick + ")"
+        return self.adisoyadi
 
 
 class Meclis(models.Model):

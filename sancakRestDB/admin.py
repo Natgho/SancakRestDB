@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.apps import apps
+
+from .forms import KmTakipForm, KunyeForm
 from .models import Deviraldigim, Disiplin, Kunye, Giris, Etkinliksurus, Harcamalar, Kasaborc, Kmtakip, \
     Meclis, Pachyelek, Sayman, Stok, Surushatirlat, Girislog
 
@@ -48,6 +49,7 @@ class KasaborcAdmin(admin.ModelAdmin):
 @admin.register(Kmtakip)
 class KmtakipAdmin(admin.ModelAdmin):
     list_display = ("adisoyadi", "km", "rotaturu")
+    form = KmTakipForm
 
     def get_queryset(self, request):
         qs = super(KmtakipAdmin, self).get_queryset(request)
@@ -59,6 +61,7 @@ class KmtakipAdmin(admin.ModelAdmin):
 @admin.register(Kunye)
 class KunyeAdmin(admin.ModelAdmin):
     list_display = ("nick", "adisoyadi", "plaka")
+    form = KunyeForm
 
     def get_queryset(self, request):
         qs = super(KunyeAdmin, self).get_queryset(request)
