@@ -33,7 +33,15 @@ class KmTakipForm(ModelForm):
 
 class KunyeForm(ModelForm):
     pozisyon = forms.ChoiceField(choices=[("ÇAYLAK", "ÇAYLAK"),
-                                          ("ÇIRAK", "ÇIRAK")])
+                                          ("ÇIRAK", "ÇIRAK"),
+                                          ("BASKAN", "BASKAN"),
+                                          ("KORDINATÖR", "KORDINATÖR"),
+                                          ("DISIPLIN", "DISIPLIN"),
+                                          ("KOÇ", "KOÇ"),
+                                          ("SAYMAN", "SAYMAN"),
+                                          ("BAŞ YOL KAPTANI", "BAŞ YOL KAPTANI"),
+                                          ("FULL", "FULL"),
+                                          ])
     kangrubu = forms.ChoiceField(choices=[('AB+', 'AB+'),
                                           ('AB-', 'AB-'),
                                           ('A+', 'A+'),
