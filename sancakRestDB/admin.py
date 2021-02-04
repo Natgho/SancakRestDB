@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .forms import KmTakipForm, KunyeForm
+from .forms import KmTakipForm, KunyeForm, SaymanForm
 from .models import Deviraldigim, Disiplin, Kunye, Giris, Etkinliksurus, Harcamalar, Kasaborc, Kmtakip, \
     Meclis, Pachyelek, Sayman, Stok, Surushatirlat, Girislog
 
@@ -82,6 +82,7 @@ class PachyelekAdmin(admin.ModelAdmin):
 
 @admin.register(Sayman)
 class SaymanAdmin(admin.ModelAdmin):
+    form = SaymanForm
     list_display = ("adisoyadi", "odemetarihi", "odemesekli", "odenentl")
 
 

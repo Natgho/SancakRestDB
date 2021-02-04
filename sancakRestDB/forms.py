@@ -3,7 +3,7 @@ from datetime import date
 from django.forms import ModelForm
 from django import forms
 
-from .models import Kmtakip, Kunye
+from .models import Kmtakip, Kunye, Sayman
 from django.contrib.admin.widgets import AdminDateWidget
 
 
@@ -53,3 +53,39 @@ class KunyeForm(ModelForm):
     class Meta:
         model = Kunye
         fields = "__all__"
+
+
+class SaymanForm(ModelForm):
+    adisoyadi = forms.ModelChoiceField(
+        queryset=Kunye.objects.only('adisoyadi'),
+        empty_label="Secim yapin")
+    odemetarihi = forms.DateField(initial=date.today, widget=AdminDateWidget())
+    odemesekli = forms.ChoiceField(choices=[("AIDAT", "AIDAT"),
+                                            ("AIDAT ODENMEDI", "AIDAT ODENMEDI"),
+                                            ("DIGER ODEME", "DIGER ODEME"),
+                                            ("PACH PARASI", "PACH PARASI"),
+                                            ("PACH PARASI ODENMEDI", "PACH PARASI ODENMEDI"),
+                                            ])
+
+    def save(self, commit=True):
+        instance: Sayman = super(SaymanForm, self).save(commit=False)
+        instance.ehliyetno = Kunye.objects.get(adisoyadi=instance.adisoyadi).ehliyetno
+        instance.odemeaciklama = "" if not instance.odemeaciklama else instance.odemeaciklama
+        instance.aciklama = "" if not instance.aciklama else instance.aciklama
+        if not instance.odenentl:
+            if instance.odemesekli == "AIDAT":
+                instance.odenentl = 20.0
+            elif instance.odemesekli == "AIDAT ODENMEDI":
+                instance.odenentl = 0.0
+            elif instance.odemesekli == "PACH PARASI":
+                instance.odenentl = 150.0
+            else:
+                instance.odenentl = 0.0
+        instance.save()
+        self.save_m2m()
+        return instance
+
+    class Meta:
+        model = Sayman
+        fields = "__all__"
+        exclude = ["ehliyetno"]

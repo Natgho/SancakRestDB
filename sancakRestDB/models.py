@@ -127,7 +127,8 @@ class Kmtakip(models.Model):
     rotaturu = models.CharField(db_column='RotaTuru', max_length=20)  # Field name made lowercase.
     km = models.DecimalField(db_column='KM', max_digits=5, decimal_places=1)  # Field name made lowercase.
     rota = models.CharField(db_column='Rota', max_length=250, null=True, blank=True)  # Field name made lowercase.
-    aciklama = models.CharField(db_column='Aciklama', max_length=250, null=True, blank=True)  # Field name made lowercase.
+    aciklama = models.CharField(db_column='Aciklama', max_length=250, null=True,
+                                blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -156,7 +157,8 @@ class Kunye(models.Model):
     plaka = models.CharField(db_column='Plaka', max_length=10)  # Field name made lowercase.
     telno = models.CharField(db_column='TelNo', max_length=15)  # Field name made lowercase.
     yakintelno = models.CharField(db_column='YakinTelNo', max_length=15)  # Field name made lowercase.
-    yelekdontarihi = models.CharField(db_column='YelekDonTarihi', max_length=11, null=True, blank=True)  # Field name made lowercase.
+    yelekdontarihi = models.CharField(db_column='YelekDonTarihi', max_length=11, null=True,
+                                      blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -213,9 +215,13 @@ class Sayman(models.Model):
     ehliyetno = models.IntegerField(db_column='EhliyetNo')  # Field name made lowercase.
     odemetarihi = models.DateField(db_column='OdemeTarihi')  # Field name made lowercase.
     odemesekli = models.CharField(db_column='OdemeSekli', max_length=25)  # Field name made lowercase.
-    odenentl = models.DecimalField(db_column='OdenenTl', max_digits=5, decimal_places=1)  # Field name made lowercase.
-    odemeaciklama = models.CharField(db_column='OdemeAciklama', max_length=30)  # Field name made lowercase.
-    aciklama = models.CharField(db_column='Aciklama', max_length=250)  # Field name made lowercase.
+    odenentl = models.DecimalField(db_column='OdenenTl', max_digits=5, decimal_places=1, null=True,
+                                   blank=True,
+                                   help_text="Sadece \"diğer ödeme\" seçeneğini seçtiğinizde fiyat giriniz")
+    odemeaciklama = models.CharField(db_column='OdemeAciklama', max_length=30, null=True,
+                                     blank=True)  # Field name made lowercase.
+    aciklama = models.CharField(db_column='Aciklama', max_length=250, null=True,
+                                blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
