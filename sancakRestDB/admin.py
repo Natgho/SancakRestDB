@@ -82,7 +82,7 @@ class PachyelekAdmin(admin.ModelAdmin):
 
 @admin.register(Sayman)
 class SaymanAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("adisoyadi", "odemetarihi", "odemesekli", "odenentl")
 
 
 @admin.register(Stok)
