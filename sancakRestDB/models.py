@@ -13,7 +13,6 @@ class Deviraldigim(models.Model):
     deviraldim = models.IntegerField(db_column='DevirAldim')  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'DevirAldigim'
         verbose_name_plural = 'Devranilan'
 
@@ -32,7 +31,6 @@ class Disiplin(models.Model):
     aciklama = models.CharField(db_column='Aciklama', max_length=1000)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'Disiplin'
         verbose_name_plural = 'Disiplin Cezalari'
 
@@ -49,7 +47,6 @@ class Etkinliksurus(models.Model):
     etkinlikyapildimi = models.CharField(db_column='EtkinlikYapildiMi', max_length=75)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'EtkinlikSurus'
         verbose_name_plural = 'Surus Etkinlikleri'
 
@@ -65,7 +62,6 @@ class Giris(models.Model):
     gorevi = models.CharField(db_column='Gorevi', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'Giris'
         verbose_name_plural = 'Giris Bilgileri'
 
@@ -77,7 +73,6 @@ class Girislog(models.Model):
     derece = models.CharField(db_column='Derece', max_length=75, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'GirisLog'
         verbose_name_plural = 'Giris Kayitlari'
 
@@ -94,7 +89,6 @@ class Harcamalar(models.Model):
     aciklama = models.CharField(db_column='Aciklama', max_length=250)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'Harcamalar'
         verbose_name_plural = 'Harcamalar'
 
@@ -112,7 +106,6 @@ class Kasaborc(models.Model):
     aciklama = models.CharField(db_column='Aciklama', max_length=1000)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'KasaBorc'
         verbose_name_plural = 'Karizma Takibi'
 
@@ -132,7 +125,6 @@ class Kmtakip(models.Model):
                                 blank=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'KmTakip'
         verbose_name_plural = 'Kilometre Takibi'
 
@@ -150,18 +142,19 @@ class Kunye(models.Model):
     kgiristarihi = models.DateField(db_column='KGirisTarihi')  # Field name made lowercase.
     meslegi = models.CharField(db_column='Meslegi', max_length=50)  # Field name made lowercase.
     yemintarihi = models.DateField(db_column='YeminTarihi')  # Field name made lowercase.
-    ehliyetno = models.CharField(db_column='EhliyetNo', max_length=10)  # Field name made lowercase.
+    ehliyetno = models.CharField(db_column='EhliyetNo', default="Ekleyin!", max_length=10)  # Field name made lowercase.
     kangrubu = models.CharField(db_column='KanGrubu', max_length=5)  # Field name made lowercase.
     motormarka = models.CharField(db_column='MotorMarka', max_length=25)  # Field name made lowercase.
     motorcc = models.CharField(db_column='MotorCC', max_length=5)  # Field name made lowercase.
     plaka = models.CharField(db_column='Plaka', max_length=10)  # Field name made lowercase.
     telno = models.CharField(db_column='TelNo', max_length=15)  # Field name made lowercase.
     yakintelno = models.CharField(db_column='YakinTelNo', max_length=15)  # Field name made lowercase.
+    yakinlik_derecesi = models.CharField("yakinlik_derecesi", max_length=50, null=True, blank=True)
+    aciklama = models.CharField("aciklama", max_length=250, null=True, blank=True)
     yelekdontarihi = models.CharField(db_column='YelekDonTarihi', max_length=11, null=True,
-                                      blank=True)  # Field name made lowercase.
+                                      blank=True)
 
     class Meta:
-        managed = False
         db_table = 'Kunye'
         verbose_name_plural = 'Kunye'
 
@@ -177,7 +170,6 @@ class Meclis(models.Model):
     aciklama = models.CharField(db_column='Aciklama', max_length=250)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'Meclis'
         verbose_name_plural = 'Meclis Kararlari'
 
@@ -201,7 +193,6 @@ class Pachyelek(models.Model):
     turkiye = models.CharField(db_column='Turkiye', max_length=5)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'PachYelek'
         verbose_name_plural = 'Pach ve Yelek Takibi'
 
@@ -224,7 +215,6 @@ class Sayman(models.Model):
                                 blank=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'Sayman'
         verbose_name_plural = 'Odemeler(Sayman)'
 
@@ -248,7 +238,6 @@ class Stok(models.Model):
     stoktarihi = models.DateField(db_column='StokTarihi', auto_now=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'Stok'
         verbose_name_plural = 'Stok'
 
@@ -265,7 +254,6 @@ class Surushatirlat(models.Model):
     aciklama = models.CharField(db_column='Aciklama', max_length=5000)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'SurusHatirlat'
         verbose_name_plural = 'Planlanan Surusler'
 
@@ -295,7 +283,6 @@ class Images(models.Model):
     image_tag.allow_tags = True
 
     class Meta:
-        managed = False
         db_table = 'images'
         verbose_name_plural = 'Ehliyet Fotograflari'
 
