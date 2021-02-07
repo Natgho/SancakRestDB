@@ -304,7 +304,7 @@ ADMIN_REORDER = (
                 'sancakRestDB.Kmtakip',
                 'sancakRestDB.Images'
                 )},
-    {'app': 'sancakRestDB', 'label': 'Yol Kaptani',
+    {'app': 'sancakRestDB', 'label': 'Koordinator',
      'models': ('sancakRestDB.Surushatirlat',
                 'sancakRestDB.Etkinliksurus')},
     {'app': 'sancakRestDB', 'label': 'Disiplin',
