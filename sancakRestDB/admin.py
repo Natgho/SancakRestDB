@@ -1,8 +1,9 @@
 from django.contrib import admin
+from django.db.models import Sum
 
-from .forms import KmTakipForm, KunyeForm, SaymanForm
+from .forms import KmTakipForm, KunyeForm, SaymanForm, PatchYelekForm, ImageForm, DisiplinForm, KasaBorcForm
 from .models import Deviraldigim, Disiplin, Kunye, Giris, Etkinliksurus, Harcamalar, Kasaborc, Kmtakip, \
-    Meclis, Pachyelek, Sayman, Stok, Surushatirlat, Girislog
+    Meclis, Pachyelek, Sayman, Stok, Surushatirlat, Girislog, Images
 
 
 @admin.register(Deviraldigim)
@@ -13,6 +14,7 @@ class DeviraldigimAdmin(admin.ModelAdmin):
 @admin.register(Disiplin)
 class DisiplinAdmin(admin.ModelAdmin):
     list_display = ("adisoyadi", "tarih", "uyariraporu")
+    form = DisiplinForm
 
     def get_queryset(self, request):
         qs = super(DisiplinAdmin, self).get_queryset(request)
@@ -38,12 +40,13 @@ class GirisKayitlariAdmin(admin.ModelAdmin):
 
 @admin.register(Harcamalar)
 class HarcamalarAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("harcamayapan", "nedenharcandi", "harcanantutar")
 
 
 @admin.register(Kasaborc)
 class KasaborcAdmin(admin.ModelAdmin):
-    pass
+    form = KasaBorcForm
+    list_display = ("adisoyadi", "alinantutar", "alinmasebebi")
 
 
 @admin.register(Kmtakip)
@@ -62,6 +65,15 @@ class KmtakipAdmin(admin.ModelAdmin):
 class KunyeAdmin(admin.ModelAdmin):
     list_display = ("nick", "adisoyadi", "plaka")
     form = KunyeForm
+    readonly_fields = ['toplam_km']
+
+    def toplam_km(self, obj:Kunye):
+        if obj.pozisyon in ["ÇAYLAK", "CAYLAK", "ÇIRAK"]:
+            toplam = Kmtakip.objects.filter(ehliyetno=obj.ehliyetno).aggregate(Sum('km'))
+            return int(toplam['km__sum'])
+        return "FULL PATCH"
+
+    toplam_km.short_description = "Toplam KM"
 
     def get_queryset(self, request):
         qs = super(KunyeAdmin, self).get_queryset(request)
@@ -77,7 +89,8 @@ class MeclisAdmin(admin.ModelAdmin):
 
 @admin.register(Pachyelek)
 class PachyelekAdmin(admin.ModelAdmin):
-    pass
+    form = PatchYelekForm
+    list_display = ("adisoyadi", "verilmetarihi")
 
 
 @admin.register(Sayman)
@@ -94,3 +107,9 @@ class StokAdmin(admin.ModelAdmin):
 @admin.register(Surushatirlat)
 class StokAdmin(admin.ModelAdmin):
     list_display = ("tarih", "surusadi", "rota", "ortkm")
+
+
+@admin.register(Images)
+class ImagesAdmin(admin.ModelAdmin):
+    form = ImageForm
+    list_display = ('ehliyetno', 'image_tag')

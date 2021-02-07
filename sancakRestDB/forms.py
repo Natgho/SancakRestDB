@@ -3,13 +3,38 @@ from datetime import date
 from django.forms import ModelForm
 from django import forms
 
-from .models import Kmtakip, Kunye, Sayman
+from .models import Kmtakip, Kunye, Sayman, Pachyelek, Images, Disiplin, Kasaborc
 from django.contrib.admin.widgets import AdminDateWidget
 
 
-class KmTakipForm(ModelForm):
+class BaseClubForm(ModelForm):
     adisoyadi = forms.ModelChoiceField(
-        queryset=Kunye.objects.filter(pozisyon__in=["ÇAYLAK", "CAYLAK", "ÇIRAK"]).only('adisoyadi'),
+        queryset=Kunye.objects.all(),
+        to_field_name='adisoyadi',
+        empty_label="Secim yapin")
+
+    def __init__(self, *args, **kwargs):
+        instance: Kunye = kwargs.get('instance', None)
+        super(BaseClubForm, self).__init__(*args, **kwargs)
+
+        if instance:
+            adisoyadi = Kunye.objects.get(ehliyetno=str(instance.ehliyetno)).adisoyadi
+            self.initial['adisoyadi'] = adisoyadi
+
+
+class DefaultClubForm(BaseClubForm):
+    def save(self, commit=True):
+        instance = super(DefaultClubForm, self).save(commit=False)
+        instance.ehliyetno = Kunye.objects.get(adisoyadi=instance.adisoyadi).ehliyetno
+        instance.save()
+        self.save_m2m()
+        return instance
+
+
+class KmTakipForm(BaseClubForm):
+    adisoyadi = forms.ModelChoiceField(
+        queryset=Kunye.objects.filter(pozisyon__in=["ÇAYLAK", "CAYLAK", "ÇIRAK"]),
+        to_field_name='adisoyadi',
         empty_label="Secim yapin")
     tarih = forms.DateField(initial=date.today, widget=AdminDateWidget())
     rotaturu = forms.ChoiceField(choices=[("TOPLANTI KM", "TOPLANTI KM"),
@@ -29,9 +54,11 @@ class KmTakipForm(ModelForm):
         model = Kmtakip
         fields = "__all__"
         exclude = ["ehliyetno"]
+        # TODO labels = {'dbadi':'olmasiniistediginad'}
 
 
 class KunyeForm(ModelForm):
+    # TODO add total debt
     pozisyon = forms.ChoiceField(choices=[("ÇAYLAK", "ÇAYLAK"),
                                           ("ÇIRAK", "ÇIRAK"),
                                           ("BASKAN", "BASKAN"),
@@ -63,10 +90,7 @@ class KunyeForm(ModelForm):
         fields = "__all__"
 
 
-class SaymanForm(ModelForm):
-    adisoyadi = forms.ModelChoiceField(
-        queryset=Kunye.objects.only('adisoyadi'),
-        empty_label="Secim yapin")
+class SaymanForm(BaseClubForm):
     odemetarihi = forms.DateField(initial=date.today, widget=AdminDateWidget())
     odemesekli = forms.ChoiceField(choices=[("AIDAT", "AIDAT"),
                                             ("AIDAT ODENMEDI", "AIDAT ODENMEDI"),
@@ -87,13 +111,77 @@ class SaymanForm(ModelForm):
                 instance.odenentl = 0.0
             elif instance.odemesekli == "PACH PARASI":
                 instance.odenentl = 150.0
-            else:
-                instance.odenentl = 0.0
         instance.save()
         self.save_m2m()
         return instance
 
     class Meta:
         model = Sayman
+        fields = "__all__"
+        exclude = ["ehliyetno"]
+
+
+class PatchYelekForm(BaseClubForm):
+    verilmetarihi = forms.DateField(initial=date.today, widget=AdminDateWidget())
+    yelek = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                       ("HAYIR", "HAYIR")])
+    bayrak = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                        ("HAYIR", "HAYIR")])
+    onsancak = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                          ("HAYIR", "HAYIR")])
+    onkurukafa = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                            ("HAYIR", "HAYIR")])
+    chopper = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                         ("HAYIR", "HAYIR")])
+    mk = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                    ("HAYIR", "HAYIR")])
+    bursa = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                       ("HAYIR", "HAYIR")])
+    sirtsancak = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                            ("HAYIR", "HAYIR")])
+    sirtkurukafa = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                              ("HAYIR", "HAYIR")])
+    turkiye = forms.ChoiceField(choices=[("EVET", "EVET"),
+                                         ("HAYIR", "HAYIR")])
+
+    def save(self, commit=True):
+        instance: Pachyelek = super(PatchYelekForm, self).save(commit=False)
+        instance.ehliyetno = Kunye.objects.get(adisoyadi=instance.adisoyadi).ehliyetno
+        instance.save()
+        self.save_m2m()
+        return instance
+
+    class Meta:
+        model = Pachyelek
+        fields = "__all__"
+        exclude = ["ehliyetno"]
+
+
+class ImageForm(BaseClubForm):
+    image_tag = forms.ImageField()
+
+    class Meta:
+        model = Images
+        fields = "__all__"
+        exclude = ["ehliyetno", 'image']
+
+    def save(self, commit=True):
+        instance: Images = super(ImageForm, self).save(commit=False)
+        instance.ehliyetno = Kunye.objects.get(adisoyadi=instance.adisoyadi).ehliyetno
+        instance.save()
+        self.save_m2m()
+        return instance
+
+
+class DisiplinForm(DefaultClubForm):
+    class Meta:
+        model = Disiplin
+        fields = "__all__"
+        exclude = ["ehliyetno"]
+
+
+class KasaBorcForm(DefaultClubForm):
+    class Meta:
+        model = Kasaborc
         fields = "__all__"
         exclude = ["ehliyetno"]

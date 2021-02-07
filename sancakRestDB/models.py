@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.utils.safestring import mark_safe
 
 
 class Deviraldigim(models.Model):
@@ -149,8 +150,7 @@ class Kunye(models.Model):
     kgiristarihi = models.DateField(db_column='KGirisTarihi')  # Field name made lowercase.
     meslegi = models.CharField(db_column='Meslegi', max_length=50)  # Field name made lowercase.
     yemintarihi = models.DateField(db_column='YeminTarihi')  # Field name made lowercase.
-    ehliyetno = models.CharField(db_column='EhliyetNo', max_length=10, blank=True,
-                                 null=True)  # Field name made lowercase.
+    ehliyetno = models.CharField(db_column='EhliyetNo', max_length=10)  # Field name made lowercase.
     kangrubu = models.CharField(db_column='KanGrubu', max_length=5)  # Field name made lowercase.
     motormarka = models.CharField(db_column='MotorMarka', max_length=25)  # Field name made lowercase.
     motorcc = models.CharField(db_column='MotorCC', max_length=5)  # Field name made lowercase.
@@ -166,7 +166,7 @@ class Kunye(models.Model):
         verbose_name_plural = 'Kunye'
 
     def __str__(self):
-        return self.adisoyadi
+        return u'{0}'.format(self.adisoyadi)
 
 
 class Meclis(models.Model):
@@ -283,7 +283,16 @@ class AuthGroup(models.Model):
 
 class Images(models.Model):
     ehliyetno = models.IntegerField(db_column='EhliyetNo')  # Field name made lowercase.
-    image = models.TextField()
+    image = models.BinaryField(editable=True)
+
+    def image_tag(self):
+        from base64 import b64encode
+        return mark_safe('<img src = "data: image/png; base64, {}" width="200" height="100">'.format(
+            b64encode(self.image).decode('utf8')
+        ))
+
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True
 
     class Meta:
         managed = False

@@ -38,6 +38,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'jazzmin',
+    'admin_reorder',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -192,6 +193,7 @@ JAZZMIN_UI_TWEAKS = {
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -280,3 +282,46 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+ADMIN_REORDER = (
+    # Keep original label and models
+    # 'sites',
+
+    # Rename app
+    # {'app': 'SancakRestDB', 'label': 'Tum '},
+
+    # Reorder app models
+    {'app': 'sancakRestDB', 'label': 'Sayman',
+     'models': ('sancakRestDB.Sayman',
+                'sancakRestDB.Harcamalar',
+                'sancakRestDB.Deviraldigim',
+                'sancakRestDB.Kasaborc',
+                'sancakRestDB.Stok')},
+
+    # Exclude models
+    {'app': 'sancakRestDB', 'label': 'Koc',
+     'models': ('sancakRestDB.Kunye',
+                'sancakRestDB.Kmtakip',
+                'sancakRestDB.Images'
+                )},
+    {'app': 'sancakRestDB', 'label': 'Yol Kaptani',
+     'models': ('sancakRestDB.Surushatirlat',
+                'sancakRestDB.Etkinliksurus')},
+    {'app': 'sancakRestDB', 'label': 'Disiplin',
+     'models': ('sancakRestDB.Disiplin',
+                'sancakRestDB.Meclis')},
+    {'app': 'sancakRestDB', 'label': 'Teknik Yonetim',
+     'models': ('sancakRestDB.Giris',
+                'sancakRestDB.Girislog',
+                'sancakRestDB.DjangoAdminLog')
+     }
+
+    # # Cross-linked models
+    # {'app': 'auth', 'models': ('auth.User', 'sites.Site')},
+    #
+    # # models with custom name
+    # {'app': 'auth', 'models': (
+    #     'auth.Group',
+    #     {'model': 'auth.User', 'label': 'Staff'},
+    # )},
+)
