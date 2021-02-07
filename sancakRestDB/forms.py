@@ -68,6 +68,9 @@ class KunyeForm(ModelForm):
                                           ("SAYMAN", "SAYMAN"),
                                           ("BAŞ YOL KAPTANI", "BAŞ YOL KAPTANI"),
                                           ("FULL", "FULL"),
+                                          ("AYRILDI", "AYRILDI"),
+                                          ("EMEKLI", "EMEKLI"),
+                                          ("BADOUT", "BADOUT"),
                                           ])
     kangrubu = forms.ChoiceField(choices=[('AB+', 'AB+'),
                                           ('AB-', 'AB-'),
