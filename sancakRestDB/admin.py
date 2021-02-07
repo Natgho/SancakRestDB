@@ -11,16 +11,21 @@ class DeviraldigimAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Disiplin)
-class DisiplinAdmin(admin.ModelAdmin):
-    list_display = ("adisoyadi", "tarih", "uyariraporu")
-    form = DisiplinForm
+class BaseClubModelAdmin(admin.ModelAdmin):
+    restricted_members = ["ÇAYLAK", "CAYLAK", "ÇIRAK"]
 
     def get_queryset(self, request):
-        qs = super(DisiplinAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
+        qs = super(BaseClubModelAdmin, self).get_queryset(request)
+        if request.user.is_superuser or \
+                Kunye.objects.get(ehliyetno=request.user.username).pozisyon not in self.restricted_members:
             return qs
         return qs.filter(ehliyetno=int(request.user.username))
+
+
+@admin.register(Disiplin)
+class DisiplinAdmin(BaseClubModelAdmin):
+    list_display = ("adisoyadi", "tarih", "uyariraporu")
+    form = DisiplinForm
 
 
 @admin.register(Etkinliksurus)
@@ -50,36 +55,24 @@ class KasaborcAdmin(admin.ModelAdmin):
 
 
 @admin.register(Kmtakip)
-class KmtakipAdmin(admin.ModelAdmin):
+class KmtakipAdmin(BaseClubModelAdmin):
     list_display = ("adisoyadi", "km", "rotaturu")
     form = KmTakipForm
 
-    def get_queryset(self, request):
-        qs = super(KmtakipAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(ehliyetno=request.user.username)
-
 
 @admin.register(Kunye)
-class KunyeAdmin(admin.ModelAdmin):
-    list_display = ("nick", "adisoyadi", "plaka")
+class KunyeAdmin(BaseClubModelAdmin):
+    list_display = ("nick", "adisoyadi", "plaka", "toplam_km")
     form = KunyeForm
     readonly_fields = ['toplam_km']
 
-    def toplam_km(self, obj:Kunye):
+    def toplam_km(self, obj: Kunye):
         if obj.pozisyon in ["ÇAYLAK", "CAYLAK", "ÇIRAK"]:
             toplam = Kmtakip.objects.filter(ehliyetno=obj.ehliyetno).aggregate(Sum('km'))
             return int(toplam['km__sum'])
         return "FULL PATCH"
 
     toplam_km.short_description = "Toplam KM"
-
-    def get_queryset(self, request):
-        qs = super(KunyeAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(ehliyetno=request.user.username)
 
 
 @admin.register(Meclis)
