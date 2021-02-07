@@ -16,9 +16,10 @@ class BaseClubModelAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(BaseClubModelAdmin, self).get_queryset(request)
-        if request.user.is_superuser or \
-                Kunye.objects.get(ehliyetno=request.user.username).pozisyon not in self.restricted_members:
+        if request.user.is_superuser:
             return qs
+        if Kunye.objects.get(ehliyetno=request.user.username).pozisyon not in self.restricted_members:
+            return qs.exclude(pozisyon__in=["EMEKLI", "AYRILDI", "BADOUT"])
         return qs.filter(ehliyetno=int(request.user.username))
 
 
@@ -70,7 +71,7 @@ class KunyeAdmin(BaseClubModelAdmin):
         if obj.pozisyon in ["ÇAYLAK", "CAYLAK", "ÇIRAK"]:
             toplam = Kmtakip.objects.filter(ehliyetno=obj.ehliyetno).aggregate(Sum('km'))
             return int(toplam['km__sum'])
-        return "FULL PATCH"
+        return obj.pozisyon
 
     toplam_km.short_description = "Toplam KM"
 
