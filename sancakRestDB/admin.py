@@ -11,18 +11,8 @@ class DeviraldigimAdmin(admin.ModelAdmin):
     pass
 
 
-class BaseClubModelAdmin(admin.ModelAdmin):
-    restricted_members = ["ÇAYLAK", "CAYLAK", "ÇIRAK"]
-
-    def get_queryset(self, request):
-        qs = super(BaseClubModelAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(ehliyetno=int(request.user.username))
-
-
 @admin.register(Disiplin)
-class DisiplinAdmin(BaseClubModelAdmin):
+class DisiplinAdmin(admin.ModelAdmin):
     list_display = ("adisoyadi", "tarih", "uyariraporu")
     form = DisiplinForm
 
@@ -54,13 +44,13 @@ class KasaborcAdmin(admin.ModelAdmin):
 
 
 @admin.register(Kmtakip)
-class KmtakipAdmin(BaseClubModelAdmin):
+class KmtakipAdmin(admin.ModelAdmin):
     list_display = ("adisoyadi", "km", "rotaturu")
     form = KmTakipForm
 
 
 @admin.register(Kunye)
-class KunyeAdmin(BaseClubModelAdmin):
+class KunyeAdmin(admin.ModelAdmin):
     list_display = ("nick", "adisoyadi", "plaka", "toplam_km")
     form = KunyeForm
     readonly_fields = ['toplam_km']
@@ -75,8 +65,7 @@ class KunyeAdmin(BaseClubModelAdmin):
         qs = super(KunyeAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
-        if Kunye.objects.get(ehliyetno=request.user.username).pozisyon not in self.restricted_members:
-            return qs.exclude(pozisyon__in=["EMEKLI", "AYRILDI", "BADOUT"])
+        return qs.exclude(pozisyon__in=["EMEKLI", "AYRILDI", "BADOUT"])
 
     toplam_km.short_description = "Toplam KM"
 
