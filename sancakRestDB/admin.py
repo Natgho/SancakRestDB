@@ -18,8 +18,6 @@ class BaseClubModelAdmin(admin.ModelAdmin):
         qs = super(BaseClubModelAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
-        if Kunye.objects.get(ehliyetno=request.user.username).pozisyon not in self.restricted_members:
-            return qs.exclude(pozisyon__in=["EMEKLI", "AYRILDI", "BADOUT"])
         return qs.filter(ehliyetno=int(request.user.username))
 
 
@@ -72,6 +70,13 @@ class KunyeAdmin(BaseClubModelAdmin):
             toplam = Kmtakip.objects.filter(ehliyetno=obj.ehliyetno).aggregate(Sum('km'))
             return int(toplam['km__sum'])
         return obj.pozisyon
+
+    def get_queryset(self, request):
+        qs = super(KunyeAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        if Kunye.objects.get(ehliyetno=request.user.username).pozisyon not in self.restricted_members:
+            return qs.exclude(pozisyon__in=["EMEKLI", "AYRILDI", "BADOUT"])
 
     toplam_km.short_description = "Toplam KM"
 
