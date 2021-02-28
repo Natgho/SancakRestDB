@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Anasayfa{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="col-md-12 text-center" style="margin-top: 10px">
+            <p><b>Üye:</b> {{ member.fullname }}</p>
+            <p><b>Nick:</b> {{ member.nick }}</p>
+            <p><b>Pozisyon:</b> {{ member.rank }}</p>
+            <p><b>Giriş Tarihi:</b> {{ member.join_date }}</p>
+            <p><b>Yemin Tarihi:</b> {{ member.date_of_oath }}</p>
+            <p><b>Motosiklet:</b> {{ member.motorcycle_name }}</p>
+            <p><b>Plakası:</b> {{ member.plaque }}</p>
+            <p><b>Kan Grubu:</b> {{ member.blood_group }}</p>
+            <p><b>Üyelik Süresi:</b> {{ member.day_of_member }} Gün</p>
+            <p><b>Toplam KM:</b> {{ member.sum_km }}</p>
+            <p><b>Borç:</b> {{ member.debt }}</p>
+        </div>
+    {% else %}
+        <p>Giriş Yapmadınız.</p>
+        <a href="{% url 'login' %}">Giriş Yap</a>
+    {% endif %}
+{% endblock %}
