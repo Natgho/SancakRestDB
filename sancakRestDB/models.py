@@ -7,6 +7,8 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+from django.dispatch import receiver
 
 
 class Deviraldigim(models.Model):
@@ -288,6 +290,41 @@ class Images(models.Model):
 
     def __str__(self):
         return "Ehliyet No:" + str(self.ehliyetno)
+
+
+class MemberLogs(models.Model):
+    action = models.CharField(max_length=64)
+    ip = models.GenericIPAddressField(null=True)
+    username = models.CharField(max_length=256, null=True)
+    log_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'MemberLogs'
+        verbose_name_plural = 'Web Giriş Kayıtları'
+
+    def __unicode__(self):
+        return '{0} - {1} - {2}'.format(self.action, self.username, self.ip)
+
+    def __str__(self):
+        return '{0} - {1} - {2}'.format(self.action, self.username, self.ip)
+
+
+@receiver(user_logged_in)
+def user_logged_in_callback(sender, request, user, **kwargs):
+    ip = request.META.get('REMOTE_ADDR')
+    MemberLogs.objects.create(action='Giriş Yaptı', ip=ip, username=user.username)
+
+
+@receiver(user_logged_out)
+def user_logged_out_callback(sender, request, user, **kwargs):
+    ip = request.META.get('REMOTE_ADDR')
+    MemberLogs.objects.create(action='Çıkış Yaptı', ip=ip, username=user.username)
+
+
+@receiver(user_login_failed)
+def user_login_failed_callback(sender, credentials, **kwargs):
+    MemberLogs.objects.create(action='Başarısız giriş denemesinde bulunuldu',
+                                       username=credentials.get('username', None))
 
 
 class AuthGroupPermissions(models.Model):
