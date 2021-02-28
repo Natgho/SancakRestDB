@@ -264,7 +264,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'tr-TR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
@@ -325,3 +325,6 @@ ADMIN_REORDER = (
     #     {'model': 'auth.User', 'label': 'Staff'},
     # )},
 )
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = "login"
